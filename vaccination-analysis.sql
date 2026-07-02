@@ -32,15 +32,7 @@ from immunization_table;
  group by vaccine
  order by vaccine desc
 
- vaccination trend over time
- select vaccine,count(vaccine) vaccine_count, 
- date_part('year',date_given) as year, 
- row_number()over(partition by date_part('year',date_given) order by count(vaccine) desc
-) as rank
-from immunization_table 
- group by date_part('year',date_given),vaccine 
- order by year, vaccine_count desc  
-
+2-- vaccination trend over time
  SELECT
     vaccine,
     COUNT(vaccine) AS vaccine_count,
@@ -57,21 +49,21 @@ ORDER BY
     year,
     vaccine_count DESC;
 	
-2--vaccination yearly trend
+3--vaccination yearly trend
 
 	select date_part('year', date_given) as year,
 	count(vaccine) vaccine_count
 	from immunization_table
 	group by date_part('year', date_given)
 
-	3--vaccination by state
+	4--vaccination by state
 	select i.state,count(it.vaccine)
 	from immunization_table it
 	join immunization_facility i
 	on it.facility_id = i.facility_id
 	group by i.state
 	
-	4--facility performance(top 10)
+	5--facility performance(top 10)
 	select i.facility_name, count(it.vaccine) vaccine_count
 	from immunization_table it
 	join immunization_facility i
@@ -81,7 +73,7 @@ ORDER BY
 	limit 10
 	 
 	
-	5--on time vs delayed vaccination
+	6--on time vs delayed vaccination
 	--BCG 0-1 MONTH
 	--OPV BIRTH
 	--PENTA 6 WEEKS
@@ -99,7 +91,7 @@ ORDER BY
 	END AS VACCINATION_STATUS
 	FROM AGE_VACCINATED
 	
-	6--COMPLETION VACCINATION STATUS
+	7--COMPLETION VACCINATION STATUS
 	select completion_status, COUNT(*) doses_received
 	from(
 	select child_name,
@@ -113,7 +105,7 @@ ORDER BY
 	group by  completion_status
 
 	--total kpis
-	--total children vaccinated
+	-- 1 total children vaccinated
 	select concat(child_name, dob) as child_key
 	from immunization_table
 	select count (distinct concat (record_id,child_name))
